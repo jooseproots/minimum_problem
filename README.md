@@ -14,7 +14,8 @@ def mock_fs_mkdirs():
     notebookutils.fs.mkdirs = mock_mkdirs
 
 def test_other_function(mock_fs_mkdirs):
-    # Now test the function
     assert src.source_code.other_function("/some/path") is False
 ```
-which works locally, but patching notebookutils before the test is more readable. Also using fixtures like this means in the cloud we would also need to mock sys.modules. 
+which works locally, but patching notebookutils before the test is more readable and using fixtures in this way means in Fabric we would also need to mock sys.modules etc. 
+
+It is possible to create fixtures with different [scopes](https://docs.pytest.org/en/stable/how-to/fixtures.html#scope-sharing-fixtures-across-classes-modules-packages-or-session), so I tried making a notebookutils mock fixture in the conftest.py file and set the scope to 'session' so all test files would share the same mock to avoid the interference, but unfortunately it didn't work for me.
